@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -14,6 +15,13 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
 	.vue(3)
     .postCss('resources/css/app.css', 'public/css', [
-        //
+        require("tailwindcss")
     ])
+	.extract()
+	.alias({
+		ziggy: path.resolve('vendor/tightenco/ziggy/dist'),
+		'@js': path.resolve(__dirname, 'resources/js')
+	})
 	.version();
+
+	console.log(path.join(__dirname, 'resources/js'), path.resolve(__dirname, 'resources/js'))

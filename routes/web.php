@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-
+use Inertia\Inertia;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware('auth')->group(function() {
+
+	Route::get('/', function () {
+		return Inertia::render('Home');
+	})->name('home');
+
+	Route::prefix('admin')->middleware('permission:admin')->group(function() {
+		Route::get('/', function () {
+			return inertia('Admin/Dashboard');
+		})->name('admin.dashboard');
+	});
 });
+
+// Route::middleware('auth')->prefix('admin')->group(function() {
+// 	Route::get('/', function () {
+// 		return inertia('Admin.Dashboard');
+// 	});
+// });
