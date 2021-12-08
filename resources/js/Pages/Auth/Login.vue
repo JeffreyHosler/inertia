@@ -60,8 +60,7 @@
 
 <script setup>
 	import { useForm } from '@inertiajs/inertia-vue3'
-	import route from 'ziggy';
-	import { Ziggy } from '@js/ziggy.js'
+	import { route } from '@js/utils/utils'
 
 	let form = useForm({
 		email: '',
@@ -70,6 +69,6 @@
 	})
 
 	let submit = () => {
-		form.post(route('login', undefined, undefined, Ziggy))
+		form.post(route('login'))
 	};
 </script>

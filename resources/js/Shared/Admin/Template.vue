@@ -21,8 +21,8 @@
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2 space-y-1">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
-                  <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
+                <a v-for="item in routes" :key="item.name" :href="item.href" :class="[isCurrent(item, route()) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
+                  <component :is="item.icon" :class="[isCurrent(item, route()) ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                   {{ item.name }}
                 </a>
               </nav>
@@ -44,10 +44,10 @@
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-2 py-4 space-y-1">
-            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
-              <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
+            <Link v-for="item in routes" :key="item.name" :href="route(item.route)" :class="[isCurrent(item, route()) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
+              <component :is="item.icon" :class="[isCurrent(item, route()) ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
               {{ item.name }}
-            </a>
+            </Link>
           </nav>
         </div>
       </div>
@@ -59,14 +59,16 @@
           <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
         </button>
         <div class="flex-1 px-4 flex justify-between">
-          <div class="flex-1 flex">
+			<div class="flex-1 flex">
             <form class="w-full flex md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div class="relative w-full text-gray-400 focus-within:text-gray-600">
                 <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                  <svg class="h-5 w-5" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+</svg>
                 </div>
-                <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search" type="search" name="search" />
+                <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search" type="search" name="search">
               </div>
             </form>
           </div>
@@ -96,75 +98,38 @@
         </div>
       </div>
 
-      <main class="flex-1">
+      <main class="flex-1 bg-gray-100 px-5 py-5">
 		  <slot />
       </main>
     </div>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
-import {
-  Dialog,
-  DialogOverlay,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  TransitionChild,
-  TransitionRoot,
-} from '@headlessui/vue'
-import {
-  BellIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuAlt2Icon,
-  UsersIcon,
-  XIcon,
-} from '@heroicons/vue/outline'
+<script setup>
+import { ref, computed } from 'vue'
+import { Dialog, DialogOverlay, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { SearchIcon } from '@heroicons/vue/solid'
+import { MenuAlt2Icon, XIcon, BellIcon } from "@heroicons/vue/outline";
 
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
-]
+import { routes } from '@js/routes'
+
+const isCurrent = (item, route) => {
+	if(item.name == 'Dashboard')
+	{
+		return route.current(item.route)
+	}
+
+	const itemRoute = item.route + '*' 
+	return route.current(itemRoute)
+	// return item.name == 'Dashboard' && route.current('admin.dashboard') ? true : ( item.active && route.current(item.active) ? true : false )
+}
+
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
 
-export default {
-  components: {
-    Dialog,
-    DialogOverlay,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    TransitionChild,
-    TransitionRoot,
-    BellIcon,
-    MenuAlt2Icon,
-    SearchIcon,
-    XIcon,
-  },
-  setup() {
-    const sidebarOpen = ref(false)
+let sidebarOpen = ref(true);
 
-    return {
-      navigation,
-      userNavigation,
-      sidebarOpen,
-    }
-  },
-}
 </script>

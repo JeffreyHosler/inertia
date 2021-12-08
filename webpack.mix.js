@@ -20,7 +20,8 @@ mix.js('resources/js/app.js', 'public/js')
 	.extract()
 	.alias({
 		ziggy: path.resolve('vendor/tightenco/ziggy/dist'),
-		'@js': path.resolve(__dirname, 'resources/js')
+		'@js': path.resolve(__dirname, 'resources/js'),
+		'@components': path.resolve(__dirname, 'resources/js/Shared/Admin/Components'),
 	})
 	.version();
 
