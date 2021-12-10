@@ -1,7 +1,6 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from "@inertiajs/inertia-vue3"
 import { InertiaProgress } from '@inertiajs/progress'
-import { ZiggyVue } from 'ziggy/vue'
 import AdminTemplate from './Shared/Admin/Template'
 import Layout from './Shared/Front/Template'
 

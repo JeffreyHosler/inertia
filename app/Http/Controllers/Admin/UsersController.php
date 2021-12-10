@@ -73,6 +73,7 @@ class UsersController extends Controller
 
 		$user->syncRoles(request()->roles);
 
+		flash('User has been saved')->success();
 		return redirect( route( 'admin.users' ) );
 	}
 
@@ -83,6 +84,7 @@ class UsersController extends Controller
 	{
 		$user->delete();
 
+		flash('User has been deleted')->success();
 		return redirect( route( 'admin.users' ) );
 	}
 }

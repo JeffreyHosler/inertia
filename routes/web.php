@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashController;
+use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +19,7 @@ use Inertia\Inertia;
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function() {
 
@@ -37,6 +38,14 @@ Route::middleware('auth')->group(function() {
 			Route::get('/form/{user?}', [UsersController::class, 'form'])->name('admin.users.form');
 			Route::match(['POST', 'PATCH'], '/{user?}', [UsersController::class, 'save'])->name('admin.users.save');
 			Route::delete('/{user}', [UsersController::class, 'destroy'])->name('admin.users.delete');
+		});
+
+		/* roles */
+		Route::prefix('roles')->middleware('can:roles,viewAny')->group(function() {
+			Route::get('/', [RolesController::class, 'index'])->name('admin.roles');
+			Route::get('/form/{role?}', [RolesController::class, 'form'])->name('admin.roles.form');
+			Route::match(['POST', 'PATCH'], '/{role?}', [RolesController::class, 'save'])->name('admin.roles.save');
+			Route::delete('/{role}', [RolesController::class, 'destroy'])->name('admin.roles.delete');
 		});
 
 	});
