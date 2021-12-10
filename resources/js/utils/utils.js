@@ -1,6 +1,3 @@
-import r from "ziggy";
-import { Ziggy } from "@js/ziggy.js";
-
 /**
  * throttle the function
  *
@@ -40,12 +37,8 @@ function debounce(func, wait, immediate) {
     };
 }
 
-function route(route) {
-	return r(route, undefined, undefined, Ziggy);
-};
 
 export { 
 	debounce,
 	throttle, 
-	route 
 };

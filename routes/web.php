@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function() {
 		/* users */
 		Route::prefix('users')->middleware('can:users,viewAny')->group(function() {
 			Route::get('/', [UsersController::class, 'index'])->name('admin.users');
+			Route::get('/form/{user?}', [UsersController::class, 'form'])->name('admin.users.form');
+			Route::match(['POST', 'PATCH'], '/{user?}', [UsersController::class, 'save'])->name('admin.users.save');
+			Route::delete('/{user}', [UsersController::class, 'destroy'])->name('admin.users.delete');
 		});
 
 	});

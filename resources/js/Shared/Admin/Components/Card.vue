@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-	let props = defineProps({
+	defineProps({
 		title: {
 			type: String,
 			required: true

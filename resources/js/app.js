@@ -2,8 +2,6 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from "@inertiajs/inertia-vue3"
 import { InertiaProgress } from '@inertiajs/progress'
 import { ZiggyVue } from 'ziggy/vue'
-import { Ziggy } from './ziggy'
-import route from 'ziggy';
 import AdminTemplate from './Shared/Admin/Template'
 import Layout from './Shared/Front/Template'
 
@@ -27,9 +25,9 @@ createInertiaApp({
   	setup({ el, App, props, plugin }) {
 		createApp({ render: () => h(App, props) })
 			.use(plugin)
-			.use(ZiggyVue, Ziggy)
 			.component("Link", Link)
 			.component("Head", Head)
+			.mixin({ methods: { route } })
 			.mount(el)
 	},
 
