@@ -42,7 +42,8 @@ class HandleInertiaRequests extends Middleware
 					'username' => auth()->user()->name,
 					'is_admin' => auth()->user()->can( 'admin' )
 				]
-			] : null
+			] : null,
+			'flash' => $request->session()->get('flash_notification')
         ]);
     }
 }

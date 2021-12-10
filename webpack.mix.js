@@ -22,7 +22,7 @@ mix.js('resources/js/app.js', 'public/js')
 		ziggy: path.resolve('vendor/tightenco/ziggy/dist'),
 		'@js': path.resolve(__dirname, 'resources/js'),
 		'@components': path.resolve(__dirname, 'resources/js/Shared/Admin/Components'),
+		'@global': path.resolve(__dirname, 'resources/js/Shared/Global'),
+
 	})
 	.version();
-
-	console.log(path.join(__dirname, 'resources/js'), path.resolve(__dirname, 'resources/js'))

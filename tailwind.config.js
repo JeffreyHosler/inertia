@@ -6,7 +6,11 @@ module.exports = {
 	  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+		zIndex: {        
+			'999999': '999999',      
+		}
+	},
   },
   variants: {
     extend: {},
